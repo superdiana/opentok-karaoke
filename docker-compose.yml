@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  web:
+    build: "./"
+    stdin_open: true
+    ports:
+    - "3000:3000"
+    - "80:80"
+    volumes:
+    - .:/usr/src/app
+    - /usr/src/app/node_modules
+    command: "npm start & python server/karaoke.py"
