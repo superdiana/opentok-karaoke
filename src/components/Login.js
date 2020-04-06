@@ -1,16 +1,6 @@
 import React, { Component } from 'react'
-import firebase from './firebase'
-//import logo from './logo.svg';
-import './App.css'
-/*import {
-  TextField,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@material-ui/core'*/
+import firebase from '../firebase'
+
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/DialogContent'

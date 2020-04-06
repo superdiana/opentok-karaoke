@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'
-import config from './config'
-//import logo from './logo.svg';
-import './App.css';
+
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/DialogContent'
 //import Drawer from '@material-ui/core/Drawer';
@@ -32,7 +30,7 @@ class PlayListPicker extends Component {
   componentDidMount(){
     console.log(this.props.playlist_id)
     //Load items from server
-    axios.get(`${config.API_URL}/api/get-videos-from-playlist`, {
+      axios.get(`${process.env.REACT_APP_SERVER_URL}/api/get-videos-from-playlist`, {
         params: {
             playlist_id: this.props.playlist_id,
             room: 'oka'

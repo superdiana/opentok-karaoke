@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-//import logo from './logo.svg';
-import './App.css';
+
 import OpenTok from '@opentok/client'
 import axios from 'axios';
-import config from './config'
+
 import Container from '@material-ui/core/Container'
 import socketIOClient from "socket.io-client"
 
@@ -114,14 +113,14 @@ class Karaoke extends Component {
     super(props)
     this.state = {
       auth: ((sessionStorage.getItem('token')!==null && sessionStorage.getItem('token')!==undefined)?true:false),
-      key: config.OT_API_KEY,
+      key: process.env.REACT_APP_OPENTOK_API_KEY,
       videoselector: null,
       openPicker: false,
       pickDisabled: false,
       queue:[],
       oka: false
     }
-    socket = socketIOClient(config.SOCKETIO_URL);
+    socket = socketIOClient(process.env.REACT_APP_SERVER_URL);
     socket.on('connect', ()=>{
       console.log("Websocket connected.")
     })
@@ -244,7 +243,7 @@ class Karaoke extends Component {
         //Get username
         let username = this.props.username
         //Get OpenTok session_id and token
-        axios.post(`${config.API_URL}/api/get-token`, {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/get-token`, {
           username: username,
           userlevel: 4,
           room: 'oka'
