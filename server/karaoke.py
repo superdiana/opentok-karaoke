@@ -197,6 +197,6 @@ def on_sub_queue(data):
 
 # the next two lines are needed if you start your app with python
 if __name__ == "__main__":
-    socketio.run(app, debug=True, host="localhost", port=80)
+    socketio.run(app, debug=True, host="0.0.0.0", port=80)
     # socketio.run(app, debug=True, host='localhost', port=5000)
 
