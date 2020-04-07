@@ -12,7 +12,7 @@ COPY ./server/requirements.txt /usr/src/app/server/
 RUN npm install --quiet
 RUN pip install -r /usr/src/app/server/requirements.txt
 
-ENV PATH /usr/src/node_modules/.bin:$PATH
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 COPY . .
 
