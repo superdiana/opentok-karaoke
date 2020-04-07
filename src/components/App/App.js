@@ -1,6 +1,10 @@
 import React from 'react';
-import { Box, Flex, Heading } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/core';
+
 import Header from '../Header';
+import Playlist from '../Playlist';
+import Queue from '../Queue';
+import Video from '../Video';
 
 function App() {
 
@@ -10,10 +14,16 @@ function App() {
         <Header />
       </Box>
       <Flex direction="row" bg="gray.200" w="100vw" color="white" flex="1">
-        <Box bg="green.900" flexBasis="70vw" color="white"><Heading>video</Heading></Box>
-        <Box bg="red.900" color="white" flex="1"><Heading>Playlist</Heading></Box>
+        <Box bg="green.900" flexBasis="70vw" color="white">
+          <Video />
+        </Box>
+        <Box bg="red.900" color="white" flex="1">
+          <Playlist />
+        </Box>
       </Flex>
-      <Box bg="gray.900" w="100vw" h="20vh" color="white"><Heading>Queue</Heading></Box>
+      <Box bg="gray.900" w="100vw" h="20vh" color="white">
+        <Queue />
+      </Box>
     </Flex>
   )
 };
