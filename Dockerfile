@@ -7,9 +7,12 @@ RUN apt-get update && apt-get install curl && \
   apt-get install -y nodejs
 
 COPY package.json .
+COPY ./server/requirements.txt /usr/src/app/server/
+
 RUN npm install --quiet
+RUN pip install -r /usr/src/app/server/requirements.txt
+
 ENV PATH /usr/src/node_modules/.bin:$PATH
 
 COPY . .
 
-RUN pip install -r /usr/src/app/server/requirements.txt
