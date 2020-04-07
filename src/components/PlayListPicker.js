@@ -1,17 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'
 
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/DialogContent'
-//import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Queue from '@material-ui/icons/Queue'
-import Visibility from '@material-ui/icons/Visibility'
-
 class PlayListPicker extends Component { 
 
   constructor(props){
@@ -62,29 +51,7 @@ class PlayListPicker extends Component {
     
     return (
         <div className="PlayListPickerContainer">
-            <Card className={this.props.openPicker? "PlayListPicker Visible":"PlayListPicker"} variant="outlined">
-                <CardContent>
-                    <Grid container spacing={3}>
-                        <Grid item xs={6}>
-                            <h1>Preview</h1>
-                            <div className="player-section">
-                                {this.state.video?<iframe title={this.state.video} id="player" src={"https://www.youtube.com/embed/"+this.state.video+"?enablejsapi=1"}></iframe>:<b>No video loaded</b>}
-                            </div>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <List>
-                                {this.state.items && this.state.items.map((item, index) => (
-                                    <ListItem button key={item.id}>
-                                        <ListItemIcon onClick={() => this.showVideoPreview(item.snippet.resourceId.videoId) }><Visibility/></ListItemIcon>
-                                        <ListItemIcon onClick={() => this.addToQueue(item.snippet.resourceId.videoId, item.snippet.title, item.snippet.thumbnails.default.url)}><Queue/></ListItemIcon>
-                                        <ListItemText primary={item.snippet.title}/>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
+            {this.state.video ? <iframe title={this.state.video} id="player" src={"https://www.youtube.com/embed/" + this.state.video + "?enablejsapi=1"}></iframe> : <b>No video loaded</b>}
         </div>
        
     )

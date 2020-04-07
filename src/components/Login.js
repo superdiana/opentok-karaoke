@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import firebase from '../contexts/firebase'
-
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/DialogContent'
+import firebase from '../contexts/firebase';
 
 const auth = firebase.auth()
 
@@ -48,6 +44,7 @@ class Login extends Component {
   render() {
     return (
       <div>
+<<<<<<< HEAD
         <Card className="LoginDialog" variant="outlined">
           <CardContent>
             <h1>Ready to Sing?</h1>
@@ -62,6 +59,8 @@ class Login extends Component {
             </Button>
           </CardContent>
         </Card>
+=======
+>>>>>>> b286212... remove old deps
       </div>
     )
   }
