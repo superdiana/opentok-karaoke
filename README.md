@@ -8,7 +8,7 @@ Install app packages, React, opentok
 npm install
 ```
 
-### Init the Client - React application for debugging 
+### Init the Client - React app (For debugging)
 
 ```sh
 npm start
@@ -30,7 +30,7 @@ It's important to use the **https url**, browsers block media resources if you u
 
 ### Init the server
 
-Enter to directory `server`
+CD to `server`
 
 Then execute the command to install requirements:
 
@@ -38,7 +38,7 @@ Then execute the command to install requirements:
 pip install -r requirements.txt
 ```
 
-Execute the command to start flask application (We will use socketIO to send messages to the room)
+Execute the command to start the flask application (We will use socketIO to send messages to the room)
 
 ```sh
 python karaoke.py

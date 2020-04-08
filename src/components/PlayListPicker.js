@@ -30,7 +30,7 @@ class PlayListPicker extends Component {
   componentDidMount(){
     console.log(this.props.playlist_id)
     //Load items from server
-      axios.get(`${process.env.REACT_APP_SERVER_URL}/api/get-videos-from-playlist`, {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/get-videos-from-playlist`, {
         params: {
             playlist_id: this.props.playlist_id,
             room: 'oka'

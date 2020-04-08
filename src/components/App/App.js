@@ -1,14 +1,39 @@
 import React, {Component} from 'react';
+
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ExitToApp from '@material-ui/icons/ExitToApp'
+import Typography from '@material-ui/core/Typography';
+
 import Login from '../Login'
+import RoomManager from '../RoomManager'
 import Karaoke from '../Karaoke'
 
-class  App extends Component { 
+const classes = {
+  title: {
+    flexGrow: 1
+  },
+  toolbar: {
+    top: 0,
+    position: 'absolute'
+  },
+  session: {
+    color: '#fff',
+    fontSize: '15px',
+    verticalAlign: 'middle'
+  }
+}
+
+class  App extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      username: sessionStorage.getItem('username'),
-      preauth: ((sessionStorage.getItem('username')!==null && sessionStorage.getItem('username')!==undefined)?true:false)
+      username: sessionStorage.getItem('user'),
+      preauth: ((sessionStorage.getItem('user')!==null && sessionStorage.getItem('user')!==undefined)?true:false),
+      roomName:null,
+      roomSelected: false
     }
   }
 
@@ -26,6 +51,13 @@ class  App extends Component {
 
   }
 
+  handleRoomSelection(room) {
+    this.setState({roomName: room})
+  }
+
+  logOut(){
+    //this is the logOut method.
+  }
 
   render(){
     if(!this.state.preauth){
@@ -40,7 +72,18 @@ class  App extends Component {
       return (
         <div className="App">
           <header className="App-header">
-            <Karaoke username={this.state.username}/>
+            <AppBar position="static" style={classes.toolbar}>
+              <Toolbar>
+                <Typography variant="h6" style={classes.title}>
+                  Oka - OpenTok Karaoke
+                </Typography>
+                <div style={classes.session}>
+                  Connected as: <b>{JSON.parse(this.state.username).displayName}</b>
+                  <ListItemIcon onClick={() => this.logOut() } style={ {marginLeft: 10, cursor:'pointer', color:'#fff', verticalAlign: 'middle'} }><ExitToApp/></ListItemIcon>
+                </div>
+              </Toolbar>
+            </AppBar>
+            {this.state.roomName?<Karaoke roomName={this.state.roomName} username={this.state.username}/>:<RoomManager handleRoomSelection={this.handleRoomSelection.bind(this)}/>}
           </header>
         </div>
       )

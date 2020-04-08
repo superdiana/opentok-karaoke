@@ -50,7 +50,7 @@ class Login extends Component {
       <div>
         <Card className="LoginDialog" variant="outlined">
           <CardContent>
-            <h1>Ready to sing?</h1>
+            <h1>Ready to Sing?</h1>
             <Button
               ref={this.wrapper}
               id="closeform"
