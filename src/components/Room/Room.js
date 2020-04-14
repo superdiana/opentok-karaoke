@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Playlist from '../Playlist';
 import Queue from '../Queue';
 import Video from '../Video';
 import { useCreateRoomModal } from '../CreateRoom';
 
+const sampleRooms = ['12345', '67890']
+
 function Room() {
-  const {modal} = useCreateRoomModal(true);
-  let { id } = useParams();
-  console.log(id);
+  const { id } = useParams();
+  const history = useHistory();
+  const { modal } = useCreateRoomModal((id === undefined));
+
+  useEffect(() => {
+    //if invalid ID, redirect to 404
+    if (sampleRooms.indexOf(id) === -1) history.push("/404");
+    // valid ID - set up OpenTok pub/sub
+
+  }, [id, history]);
+
   return (
     <>
       {modal}
@@ -21,9 +31,9 @@ function Room() {
           <Playlist />
         </Box>
       </Flex>
-        <Box maxW="100vw" maxH="30vh" p={4} color="white">
-          <Queue />
-        </Box>
+      <Box maxW="100vw" maxH="30vh" p={4} color="white">
+        <Queue />
+      </Box>
     </>
   )
 };
