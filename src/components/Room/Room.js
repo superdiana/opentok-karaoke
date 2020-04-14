@@ -14,8 +14,8 @@ function Room() {
   const { modal } = useCreateRoomModal((id === undefined));
 
   useEffect(() => {
-    //if invalid ID, redirect to 404
-    if (sampleRooms.indexOf(id) === -1) history.push("/404");
+    //if invalid ID, redirect to 404 (check by name and ID)
+    if (id !== undefined && sampleRooms.indexOf(id) === -1) history.push("/404");
     // valid ID - set up OpenTok pub/sub
 
   }, [id, history]);
