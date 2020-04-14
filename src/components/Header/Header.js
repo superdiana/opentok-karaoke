@@ -1,13 +1,13 @@
 import React from 'react';
 import { Flex, Heading } from '@chakra-ui/core';
-import ChannelSelect from '../ChannelSelect';
+import { CreateRoomButton } from '../CreateRoom';
 
 function Header() {
 
   return (
     <Flex direction="row">
       <Heading flex={3}>OpenTok Karaoke</Heading>
-      <ChannelSelect />
+      <CreateRoomButton />
     </Flex>
   )
 };
