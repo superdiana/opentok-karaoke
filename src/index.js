@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from "react-router-dom";
-import { ThemeProvider, theme } from "@chakra-ui/core";
-import AppWrapper from './components/App';
+import { CSSReset, ThemeProvider, theme } from "@chakra-ui/core";
+import App from './components/App';
+import FirebaseProvider from './contexts/firebase';
 
 ReactDOM.render(
+  <FirebaseProvider>
     <Router>
       <ThemeProvider theme={theme}>
-        <AppWrapper />
+        <CSSReset />
+        <App />
       </ThemeProvider>
-    </Router>,
+    </Router>
+  </FirebaseProvider>,
   document.getElementById('root')
 );
