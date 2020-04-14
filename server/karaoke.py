@@ -1,5 +1,4 @@
-import json
-import requests
+import json, requests, base64 
 from flask import Flask, abort, request, jsonify, g
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, send
@@ -68,6 +67,13 @@ def api_delete_room_by_id(id):
 def api_create_token(id):
     print(id)
     # token = opentok.generate_token(session_id)
+    return jsonify({"status": "success"}), 200
+
+# GET METHOD - GET PLAYLIST ITEMS BY ROOM ID
+@app.route('/api/room/<id>/playlistItems', methods=['POST'])
+def api_get_playlist(id):
+    print(id)
+    # get playlist with sql query
     return jsonify({"status": "success"}), 200
 
 # the next two lines are needed if you start your app with python

@@ -3,7 +3,7 @@ import { Flex, Image, PseudoBox, Text, Skeleton } from '@chakra-ui/core';
 import sample from './sample';
 
 function Playlist() {
-  const [playlist, setPlaylist] = useState();
+  const [playlist, setPlaylist] = useState(sample);
 
   return (
     <Flex
@@ -62,11 +62,3 @@ function Playlist() {
 };
 
 export default Playlist;
-
-
-// <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
-//   <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
-//   <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
-//   <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
-//   <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
-//   <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />

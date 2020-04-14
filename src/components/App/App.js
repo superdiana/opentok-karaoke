@@ -11,7 +11,8 @@ function renderSwitch(u, i, e) {
   if (u) return <AuthorizedView />;
   return <Login />;
 }
-function AppWrapper() {
+
+function App() {
   // const { user, initializing, error } = useAuth();
   const user = true;
   const initializing = false;
@@ -30,4 +31,4 @@ function AppWrapper() {
   )
 };
 
-export default AppWrapper;
+export default App;
