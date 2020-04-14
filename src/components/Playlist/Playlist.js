@@ -1,35 +1,23 @@
 import React from 'react';
-import { Box, Heading } from '@chakra-ui/core';
+import { Flex, Skeleton} from '@chakra-ui/core';
 
 function Playlist() {
 
   return (
-    <Box maxH="calc(100% - 1rem)" overflow="scroll" p={4}>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-      <Heading>Playlist</Heading>
-    </Box>
+    <Flex
+      direction="column"
+      maxH="calc(100% - 1rem)"
+      alignItems="center"
+      overflow="scroll"
+      p={4}
+    >
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="100px" width="100px" m="10px" />
+    </Flex>
   )
 };
 

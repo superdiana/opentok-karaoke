@@ -1,29 +1,33 @@
 import React from 'react';
-import { Box, Flex } from '@chakra-ui/core';
-import { useParams } from "react-router-dom";
-import Playlist from '../Playlist';
-import Queue from '../Queue';
-import Video from '../Video';
+import Login from '../Login';
+import Loading from '../Loading';
+import AuthorizedView from '../AuthorizedView';
+import { Flex } from '@chakra-ui/core';
+// import { useAuth } from '../context/firebase';
 
-function App() {
-  let { id } = useParams();
-  console.log(id);
+function renderSwitch(u, i, e) {
+  if (i) return <Loading />;
+  if (e) return <Login error={e} />;
+  if (u) return <AuthorizedView />;
+  return <Login />;
+}
+function AppWrapper() {
+  // const { user, initializing, error } = useAuth();
+  const user = true;
+  const initializing = false;
+  const error = false;
+
   return (
-    <>
-      <Flex direction="row" bg="gray.200" w="100vw" color="white" flex="1 1 70vh" overflow="hidden">
-        <Box bg="green.900" flexBasis="80vw" color="white" p={4}>
-          <Video />
-        </Box>
-        <Box bg="red.900" color="white" maxH="100%" flex="1">
-          <Playlist />
-        </Box>
-      </Flex>
-      <Box bg="gray.900" maxW="100vw" maxH="30vh" p={4} color="white">
-        <Queue />
-      </Box>
-    </>
+    <Flex
+      direction="column"
+      h="100vh"
+      overflow={'hidden'}
+      backgroundImage="url('/images/login-background.jpg')"
+      backgroundSize="cover"
+    >
+      {renderSwitch(user, initializing, error)}
+    </Flex>
   )
 };
 
-
-export default App;
+export default AppWrapper;
