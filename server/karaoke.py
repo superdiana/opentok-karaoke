@@ -1,4 +1,6 @@
-import json, requests, base64 
+import json
+import requests
+import uuid
 from flask import Flask, abort, request, jsonify, g
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, send
@@ -28,15 +30,24 @@ def api_ping():
 # POST METHOD - CREATE ROOM
 @app.route('/api/room', methods=['POST'])
 def api_create_room():
-    conn = db.connect()
-    with conn:
+    params = request.get_json() or request.form or request.args
+    if 'playlist_id' and 'owner' in params:
         # create OpenTok Session for room
         session = opentok.create_session(environ.get("OPENTOK_SESSION_HOST"))
-        db.create_room(conn, (session.session_id, None))
-    return jsonify({"status": "success"}), 200
+        roomId = str(uuid.uuid4())
+        db.create_room((
+            roomId,
+            session.session_id,
+            params.get('playlist_id'),
+            params.get('owner'),
+            params.get('room_name')
+        ))
+    else:
+        return jsonify({"status": "error", "message": "Required params not provided"}), 400
+    return jsonify({"status": "success", "id": roomId}), 200
 
 # GET METHOD - LIST ROOMS
-@app.route('/api/room/', methods=['GET'])
+@app.route('/api/room', methods=['GET'])
 def api_get_all_rooms():
     room_data = db.query('SELECT * FROM rooms')
     return jsonify({"status": "success", "data": room_data}), 200

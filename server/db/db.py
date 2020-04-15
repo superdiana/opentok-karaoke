@@ -1,32 +1,39 @@
 import sqlite3
 from flask import g
 
-DATABASE = './db/karaoke.db'
+DATABASE = './server/db/karaoke.db'
+
 
 def create_database():
-    connection = sqlite3.connect(DATABASE)
-    cursor = connection.cursor()
-    create_room_table = '{}{}'.format(
-                        'CREATE TABLE IF NOT EXISTS ',
-                        'rooms(session TEXT PRIMARY KEY, playlist TEXT)'
-    )
+    conn = sqlite3.connect(DATABASE)
+    cur = conn.cursor()
+    create_room_table = '''CREATE TABLE IF NOT EXISTS rooms(
+                        id TEXT PRIMARY KEY,
+                        session TEXT NOT NULL,
+                        playlist_id TEXT NOT NULL,
+                        owner TEXT NOT NULL,
+                        room_name TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);'''
 
-    cursor.execute(create_room_table)
+    cur.execute(create_room_table)
 
-    connection.commit()
-    connection.close()
+    conn.commit()
+    conn.close()
 
     print('Database ready to go')
+
 
 def make_dicts(cursor, row):
     return dict((cursor.description[idx][0], value)
                 for idx, value in enumerate(row))
 
+
 def connect():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
+        db = g._database = sqlite3.connect(DATABASE, isolation_level=None)
     return db
+
 
 def query(query, args=(), one=False):
     conn = connect()
@@ -39,7 +46,7 @@ def query(query, args=(), one=False):
 
 def create_room(room):
     conn = connect()
-    sql = 'INSERT INTO rooms VALUES(?,?)'
+    sql = 'INSERT INTO rooms(id,session,playlist_id,owner,room_name) VALUES(?,?,?,?,?)'
     cur = conn.cursor()
     cur.execute(sql, room)
     return cur.lastrowid
