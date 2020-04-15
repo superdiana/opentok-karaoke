@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Button, Flex, Heading, useToast } from '@chakra-ui/core';
+import { Button, Flex, Heading, useToast } from '@chakra-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { useAuth } from '../../contexts/firebase';
 
-// import { useAuth } from '../../contexts/firebase';
 function ErrorToaster() {
   const toast = useToast();
   return (
@@ -18,9 +18,10 @@ function ErrorToaster() {
     </>
   )
 }
-function Login(e) {
-  // const { login } = useAuth();
 
+function Login({ error = false}) {
+  const { googleLogin } = useAuth();
+  
   return (
     <Flex
       h="100vh"
@@ -30,7 +31,7 @@ function Login(e) {
       backgroundImage="url('/images/login-background.jpg')"
       backgroundSize="cover"
     >
-      {e ? <ErrorToaster /> : null }
+      {error ? <ErrorToaster /> : null}
       <Flex
         bg="white"
         direction="column"
@@ -51,6 +52,7 @@ function Login(e) {
           direction="row"
           alignItems="center"
           justifyContent="space-between"
+          onClick={googleLogin}
         >
           <FontAwesomeIcon icon={faGoogle} />
           Login With Google

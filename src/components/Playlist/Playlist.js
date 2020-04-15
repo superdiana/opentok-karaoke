@@ -3,7 +3,7 @@ import { Flex, Image, PseudoBox, Text, Skeleton } from '@chakra-ui/core';
 import sample from './sample';
 
 function Playlist() {
-  const [playlist, setPlaylist] = useState(sample);
+  const [playlist, setPlaylist] = useState();
 
   return (
     <Flex

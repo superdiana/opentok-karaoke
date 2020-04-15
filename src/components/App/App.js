@@ -3,7 +3,7 @@ import Login from '../Login';
 import Loading from '../Loading';
 import AuthorizedView from '../AuthorizedView';
 import { Flex } from '@chakra-ui/core';
-// import { useAuth } from '../context/firebase';
+import { useAuth } from '../../contexts/firebase';
 
 function renderSwitch(u, i, e) {
   if (i) return <Loading />;
@@ -13,10 +13,7 @@ function renderSwitch(u, i, e) {
 }
 
 function App() {
-  // const { user, initializing, error } = useAuth();
-  const user = true;
-  const initializing = false;
-  const error = false;
+  const { user, initializing, error } = useAuth();
 
   return (
     <Flex
