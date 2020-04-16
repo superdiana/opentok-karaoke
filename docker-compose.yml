@@ -11,4 +11,4 @@ services:
     volumes:
     - .:/usr/src/app
     - /usr/src/app/node_modules
-    command: sh -c "python server/karaoke.py & npm start"
+    command: ["npm", "run", "dev"]
