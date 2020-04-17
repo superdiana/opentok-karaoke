@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@chakra-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useCreateRoomModal } from './CreateRoomModal';
+import useCreateRoomModal from './useCreateRoomModal';
 
 function CreateRoomButton() {
   const {modal, toggle} = useCreateRoomModal();

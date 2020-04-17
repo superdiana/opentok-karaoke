@@ -10,7 +10,11 @@ from os.path import join, dirname
 from db import db
 
 app = Flask(__name__)
+
 CORS(app)
+
+app.url_map.strict_slashes = False
+
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 opentok = OpenTok(environ.get("OPENTOK_API_KEY"),
@@ -27,10 +31,17 @@ def teardown_request(exception):
 def api_ping():
     return jsonify({"status": "success"}), 200
 
-# POST METHOD - CREATE ROOM
-@app.route('/api/room', methods=['POST'])
+@app.route('/api/room', methods=['GET'])
+def api_get_all_rooms():
+    room_data = db.query('SELECT * FROM rooms')
+    return jsonify({"status": "success", "data": room_data}), 200
+
+
+@app.route('/api/room', methods=['POST', 'OPTIONS'])
 def api_create_room():
     params = request.get_json() or request.form or request.args
+    print(request.get_json())
+
     if 'playlist_id' and 'owner' in params:
         # create OpenTok Session for room
         session = opentok.create_session(environ.get("OPENTOK_SESSION_HOST"))
@@ -46,16 +57,10 @@ def api_create_room():
         return jsonify({"status": "error", "message": "Required params not provided"}), 400
     return jsonify({"status": "success", "id": roomId}), 200
 
-# GET METHOD - LIST ROOMS
-@app.route('/api/room', methods=['GET'])
-def api_get_all_rooms():
-    room_data = db.query('SELECT * FROM rooms')
-    return jsonify({"status": "success", "data": room_data}), 200
-
 # GET METHOD - GET ROOM BY ID
 @app.route('/api/room/<id>', methods=['GET'])
 def api_get_room_by_id(id):  
-    room_data = db.query('SELECT * FROM rooms WHERE session=?;', (id,))
+    room_data = db.query('SELECT * FROM rooms WHERE id=?;', (id,))
     if room_data:
         return jsonify({"status": "success", "data": room_data}), 200
     return abort(404)

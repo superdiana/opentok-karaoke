@@ -1,27 +1,13 @@
 import React from 'react';
-import { Button, Flex, Heading, useToast } from '@chakra-ui/core';
+import { Button, Flex, Heading } from '@chakra-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useAuth } from '../../contexts/firebase';
+import Toaster from '../Toaster';
 
-function ErrorToaster() {
-  const toast = useToast();
-  return (
-    <>
-      {toast({
-        title: "Login Failed.",
-        description: "Something went wrong.",
-        status: "error",
-        duration: 7000,
-        isClosable: true,
-      })}
-    </>
-  )
-}
-
-function Login({ error = false}) {
+function Login({ error = false }) {
   const { googleLogin } = useAuth();
-  
+
   return (
     <Flex
       h="100vh"
@@ -31,7 +17,14 @@ function Login({ error = false}) {
       backgroundImage="url('/images/login-background.jpg')"
       backgroundSize="cover"
     >
-      {error ? <ErrorToaster /> : null}
+      {error ?
+        <Toaster
+          type="error"
+          title="Login Failed"
+          description="Something went wrong."
+        /> :
+        null
+      }
       <Flex
         bg="white"
         direction="column"

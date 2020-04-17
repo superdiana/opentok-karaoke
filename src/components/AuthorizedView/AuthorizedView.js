@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
 import { Box } from '@chakra-ui/core';
-
 import Header from '../Header';
 import Room from '../Room/Room';
 import NotFound from '../NotFound/NotFound';

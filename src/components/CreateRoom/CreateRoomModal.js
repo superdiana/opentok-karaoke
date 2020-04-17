@@ -1,6 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Formik, Field } from 'formik';
 import { useHistory } from "react-router-dom";
+import { Helmet } from 'react-helmet';
+import axios from 'axios';
+
+// import Toaster from '../Toaster';
+import { useAuth } from '../../contexts/firebase';
 import {
   Button,
   FormControl,
@@ -12,20 +17,35 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  useDisclosure
+  ModalCloseButton
 } from "@chakra-ui/core";
 
 function CreateRoomModal({ visible, toggle }) {
-  const focus = useRef();
+
   const history = useHistory();
+  const { user } = useAuth();
+  const focus = useRef();
 
   const createNewRoom = (values, actions) => {
-    // send to API, on valid response redirect to new room
-    console.log(JSON.stringify(values, null, 2));
+    let data = {
+      ...values,
+      owner: user.email
+    }
     actions.setSubmitting(false);
-    history.push(`/${values.playlistId}`)
-    toggle();
+    axios({
+      method: 'post',
+      url: '/api/room',
+      data: data
+    })
+      .then((res) => {
+        actions.setSubmitting(false);
+        toggle();
+        if (!!res.data?.id) history.push(`/${res.data.id}`)
+      })
+      .catch((err) => {
+        console.log(err);
+        actions.setSubmitting(false);
+      })
   }
 
   return (
@@ -35,32 +55,35 @@ function CreateRoomModal({ visible, toggle }) {
       isCentered={true}
       initialFocusRef={focus}
     >
+      <Helmet>
+        <title>Create New Room - OTK</title>
+      </Helmet>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create New Karaoke Room</ModalHeader>
         <ModalCloseButton />
         <Formik
-          initialValues={{ playlistId: "", roomName: "" }}
+          initialValues={{ playlist_id: "", room_name: `${user.displayName}'s Room` }}
           onSubmit={createNewRoom}
         >
-          {({ isSubmitting, handleSubmit}) => (
+          {({ isSubmitting, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <ModalBody>
-                <Field name="playlistId">
+                <Field name="playlist_id">
                   {({ field }) => (
                     <FormControl mb={10}>
-                      <FormLabel htmlFor="playlistId">YouTube Playlist</FormLabel>
-                      <Input {...field} id="playlistId" placeholder="123-456-789" ref={focus} />
+                      <FormLabel htmlFor="playlist_id">YouTube Playlist ID</FormLabel>
+                      <Input {...field} id="playlist_id" placeholder="123-456-789" ref={focus} />
                     </FormControl>
                   )}
                 </Field>
 
 
-                <Field name="roomName">
+                <Field name="room_name">
                   {({ field }) => (
                     <FormControl mb={10}>
-                      <FormLabel htmlFor="roomName">Room Name</FormLabel>
-                      <Input {...field} id="roomName" placeholder="My Room Name" />
+                      <FormLabel htmlFor="room_name">Room Name</FormLabel>
+                      <Input {...field} id="room_name" />
                     </FormControl>
                   )}
                 </Field>
@@ -84,21 +107,4 @@ function CreateRoomModal({ visible, toggle }) {
   )
 };
 
-function useCreateRoomModal(visible = false) {
-  const { isOpen, onOpen, onToggle } = useDisclosure();
-  useEffect(() => {
-    if (visible) onOpen();
-  }, [visible, onOpen])
-
-  const modal = <CreateRoomModal visible={isOpen} toggle={onToggle} />;
-
-  return {
-    modal,
-    toggle: onToggle
-  }
-}
-
-export {
-  useCreateRoomModal,
-  CreateRoomModal
-};
+export default CreateRoomModal;
