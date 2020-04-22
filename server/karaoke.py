@@ -40,7 +40,6 @@ def api_get_all_rooms():
 @app.route('/api/room', methods=['POST', 'OPTIONS'])
 def api_create_room():
     params = request.get_json() or request.form or request.args
-    print(request.get_json())
 
     if 'playlist_id' and 'owner' in params:
         # create OpenTok Session for room
@@ -65,25 +64,15 @@ def api_get_room_by_id(id):
         return jsonify({"status": "success", "data": room_data}), 200
     return abort(404)
 
-# PATCH METHOD - UPDATE ROOM BY ID
-@app.route('/api/room/<id>', methods=['PATCH'])
-def api_update_room_by_id(id):
-    # room_data = db.query('SELECT * FROM rooms WHERE session=?;', (id,))
-    # if room_data:
-    #     return jsonify({"status": "success", "data": room_data}), 200
-    return jsonify({"status": "success"}), 200
-
-# DELETE METHOD - DELETE ROOM
-@app.route('/api/room/<id>', methods=['DELETE'])
-def api_delete_room_by_id(id):
-    return jsonify({"status": "success"}), 200
-
 # POST METHOD - CREATE TOKEN BY ROOM ID
-@app.route('/api/room/<id>/token', methods=['POST'])
+@app.route('/api/room/<id>/token', methods=['GET'])
 def api_create_token(id):
-    print(id)
-    # token = opentok.generate_token(session_id)
-    return jsonify({"status": "success"}), 200
+    room_data = db.query('SELECT * FROM rooms WHERE id=?;', (id,))
+    if room_data:
+        token = opentok.generate_token(room_data[0].get("session"))
+        if token:
+            return jsonify({"status": "success", "token":token}), 200
+    return abort(404)
 
 # GET METHOD - GET PLAYLIST ITEMS BY ROOM ID
 @app.route('/api/room/<id>/playlistItems', methods=['POST'])
