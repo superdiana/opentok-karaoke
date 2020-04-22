@@ -1,23 +1,17 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/core';
-import { Redirect, useParams } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import Playlist from '../Playlist';
 import Queue from '../Queue';
 import Video from '../Video';
-import useAxios from '@use-hooks/axios';
+import RoomProvider, { useRoom } from '../../contexts/room';
 import { useCreateRoomModal } from '../CreateRoom';
 
 function Room() {
-  const { id } = useParams();
-  console.log(id);
-  const { modal } = useCreateRoomModal((id === undefined));
-  const { response, loading, error } = useAxios({
-    url: `/api/room/${id}`,
-    method: 'GET',
-    trigger: id,
-    forceDispatchEffect: () => !!id
-  });
-  
+  const { room } = useRoom();
+  const { result, error, loading } = room;
+  const { modal } = useCreateRoomModal(result === null);
+
   return (
     <>
       {error?.response?.status === 404 ? <Redirect to="/404" /> : null}
@@ -43,5 +37,11 @@ function Room() {
 
 };
 
+export default function RoomWrapper() {
+  return (
+    <RoomProvider>
+      <Room />
+    </RoomProvider>
+  )
+};
 
-export default Room;
