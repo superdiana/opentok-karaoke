@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Flex, Image, PseudoBox, Text, Skeleton } from '@chakra-ui/core';
-import sample from './sample';
+import { useRoom } from '../../contexts/room';
 
 function Playlist() {
-  const [playlist, setPlaylist] = useState();
-
+  const { playlist } = useRoom();
+  const { result } = playlist;
+  
   return (
     <Flex
       direction="column"
@@ -13,13 +14,13 @@ function Playlist() {
       overflow="scroll"
       p={4}
     >
-      {playlist ? playlist.items?.map((item) => {
+      {result ? result?.data?.data.map((item) => {
         return (
           <PseudoBox
             w="100%"
             display="flex"
             direction="row"
-            key={item.id}
+            key={item.video_id}
             flexWrap="nowrap"
             alignItems="center"
             _hover={{ bg: "gray.600" }}
@@ -29,9 +30,9 @@ function Playlist() {
             <Image
               flex={1}
               mr="8px"
-              src={item.snippet.thumbnails.default.url}
+              src={item.thumbnail_url}
             />
-            <Text fontSize="xs" flex={1}>{item.snippet.title}</Text>
+            <Text fontSize="xs" flex={1}>{item.title}</Text>
           </PseudoBox>
 
         )

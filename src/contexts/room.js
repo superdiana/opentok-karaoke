@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouteMatch, useParams } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import { useAsync } from 'react-async-hook';
 import { useDisclosure } from '@chakra-ui/core';
 import OT from '@opentok/client';
@@ -32,7 +32,8 @@ function RoomProvider({ children }) {
   const route = useRouteMatch("/:id");
   const room = useAsync(getRoom, [route?.params?.id]);
   const token = useAsync(getOTToken, [route?.params?.id]);
-  
+  const playlist = useAsync(getYTPlaylistItems, [route?.params?.id]);
+
   const [publisher, setPublisher] = useState(null);
   const [session, setSession] = useState(null);
   const [streams, setStreams] = useState([]);
@@ -44,17 +45,11 @@ function RoomProvider({ children }) {
     if (home.isExact) openModal();
   }, [home.isExact, openModal])
 
-  // create session when room is loaded
+  // create session and publisher when room is loaded
   useEffect(() => {
     if (!room.result) return;
-    console.log("Setting Session");
+    console.log("Creating Session and Publisher");
     setSession(OT.initSession(process.env.REACT_APP_OPENTOK_API_KEY, room.result.data.data[0].session));
-  }, [room.result]);
-
-  // create publisher when room is loaded
-  useEffect(() => {
-    if (!room.result) return;
-    console.log("Setting Publisher");
     setPublisher(OT.initPublisher("publishedVideo", { height: "100%", width: "100%" }));
   }, [room.result]);
 
@@ -73,7 +68,7 @@ function RoomProvider({ children }) {
       setStreams(currentStreams => {
         let p = currentStreams.indexOf(event.stream);
         if (p > -1) currentStreams.splice(p, 1);
-        
+
         return [...currentStreams];
       });
     });
@@ -83,7 +78,6 @@ function RoomProvider({ children }) {
       console.log("Session Connected");
       setConnected(true)
     })
-
   }, [session, token.result]);
 
   // publish stream to session
@@ -104,6 +98,7 @@ function RoomProvider({ children }) {
 
   const value = {
     room,
+    playlist,
     streams,
     createStream,
     session,
