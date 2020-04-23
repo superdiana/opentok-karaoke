@@ -3,7 +3,7 @@ import { Formik, Field } from 'formik';
 import { useHistory } from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-
+import { useRoom } from '../../contexts/room';
 // import Toaster from '../Toaster';
 import { useAuth } from '../../contexts/firebase';
 import {
@@ -20,12 +20,12 @@ import {
   ModalCloseButton
 } from "@chakra-ui/core";
 
-function CreateRoomModal({ visible, toggle }) {
-
+function CreateRoomModal() {
   const history = useHistory();
   const { user } = useAuth();
+  const { modalVisible: visible, closeModal: close } = useRoom();
   const focus = useRef();
-
+  
   const createNewRoom = (values, actions) => {
     let data = {
       ...values,
@@ -39,7 +39,7 @@ function CreateRoomModal({ visible, toggle }) {
     })
       .then((res) => {
         actions.setSubmitting(false);
-        toggle();
+        close();
         if (!!res.data?.id) history.push(`/${res.data.id}`)
       })
       .catch((err) => {
@@ -51,7 +51,7 @@ function CreateRoomModal({ visible, toggle }) {
   return (
     <Modal
       isOpen={visible}
-      onClose={toggle}
+      onClose={close}
       isCentered={true}
       initialFocusRef={focus}
     >
@@ -106,5 +106,6 @@ function CreateRoomModal({ visible, toggle }) {
     </Modal>
   )
 };
+
 
 export default CreateRoomModal;

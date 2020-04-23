@@ -4,20 +4,16 @@ import { Redirect } from "react-router-dom";
 import Playlist from '../Playlist';
 import Queue from '../Queue';
 import Video from '../Video';
-import RoomProvider, { useRoom } from '../../contexts/room';
-import { useCreateRoomModal } from '../CreateRoom';
+import { useRoom } from '../../contexts/room';
 
 function Room() {
   const { room } = useRoom();
-  const { result, error, loading } = room;
-  const { modal } = useCreateRoomModal(result === null);
-
+  const { error, loading } = room;
   return (
     <>
       {error?.response?.status === 404 ? <Redirect to="/404" /> : null}
       {loading ? null :
         <>
-          {modal}
           <Flex direction="row" w="100vw" color="white" flex="1 1 70vh" overflow="hidden">
             <Box flexBasis="80vw" color="white" p={4}>
               <Video />
@@ -37,11 +33,5 @@ function Room() {
 
 };
 
-export default function RoomWrapper() {
-  return (
-    <RoomProvider>
-      <Room />
-    </RoomProvider>
-  )
-};
+export default Room;
 

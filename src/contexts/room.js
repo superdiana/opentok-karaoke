@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useRouteMatch, useParams } from "react-router-dom";
 import { useAsync } from 'react-async-hook';
+import { useDisclosure } from '@chakra-ui/core';
 import OT from '@opentok/client';
 import axios from 'axios';
 
 const RoomContext = React.createContext();
+
+// const createRoom = async id => {
+//   if (!id) return null;
+//   return await axios.get(`/api/room/${id}`)
+// };
 
 const getRoom = async id => {
   if (!id) return null;
@@ -16,27 +22,43 @@ const getOTToken = async id => {
   return await axios.get(`/api/room/${id}/token`)
 };
 
+const getYTPlaylistItems = async id => {
+  if (!id) return null;
+  return await axios.get(`/api/room/${id}/playlist`)
+};
+
 function RoomProvider({ children }) {
-  const { id } = useParams();
+  const home = useRouteMatch("/");
+  const route = useRouteMatch("/:id");
+  const room = useAsync(getRoom, [route?.params?.id]);
+  const token = useAsync(getOTToken, [route?.params?.id]);
+  
   const [publisher, setPublisher] = useState(null);
   const [session, setSession] = useState(null);
-  const room = useAsync(getRoom, [id]);
-  const token = useAsync(getOTToken, [id]);
   const [streams, setStreams] = useState([]);
   const [connected, setConnected] = useState(null);
+  const { isOpen: modalVisible, onOpen: openModal, onClose: closeModal } = useDisclosure();
 
+  //show/hide create room modal
+  useEffect(() => {
+    if (home.isExact) openModal();
+  }, [home.isExact, openModal])
+
+  // create session when room is loaded
   useEffect(() => {
     if (!room.result) return;
     console.log("Setting Session");
     setSession(OT.initSession(process.env.REACT_APP_OPENTOK_API_KEY, room.result.data.data[0].session));
   }, [room.result]);
 
+  // create publisher when room is loaded
   useEffect(() => {
     if (!room.result) return;
     console.log("Setting Publisher");
     setPublisher(OT.initPublisher("publishedVideo", { height: "100%", width: "100%" }));
   }, [room.result]);
 
+  // set session event handlers and connect to session
   useEffect(() => {
     if (!session || !token.result) return;
     console.log("Setting Events");
@@ -64,13 +86,14 @@ function RoomProvider({ children }) {
 
   }, [session, token.result]);
 
+  // publish stream to session
   useEffect(() => {
     if (!connected) return;
     console.log("Publishing Stream");
     session.publish(publisher);
   }, [connected, session, publisher]);
 
-
+  // method to create new streams
   const createStream = (ref, stream) => {
     console.log("Creating Stream Subscription");
     session.subscribe(stream, ref?.current?.id, {
@@ -83,7 +106,10 @@ function RoomProvider({ children }) {
     room,
     streams,
     createStream,
-    session
+    session,
+    modalVisible,
+    openModal,
+    closeModal
   };
 
   return (

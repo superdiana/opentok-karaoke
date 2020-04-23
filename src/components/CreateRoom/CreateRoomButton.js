@@ -2,20 +2,19 @@ import React from 'react';
 import { Button } from '@chakra-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import useCreateRoomModal from './useCreateRoomModal';
+import { useRoom } from '../../contexts/room';
 
 function CreateRoomButton() {
-  const {modal, toggle} = useCreateRoomModal();
+  const { openModal: open } = useRoom();
   return (
     <>
-      {modal}
       <Button
         display="flex"
         direction="row"
         w="22vh"
         justifyContent="space-between"
         variantColor="blue"
-        onClick={toggle}
+        onClick={open}
       >
         <FontAwesomeIcon icon={faPlus} />
         Create New Room

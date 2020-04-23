@@ -4,10 +4,13 @@ import { Box } from '@chakra-ui/core';
 import Header from '../Header';
 import Room from '../Room/Room';
 import NotFound from '../NotFound/NotFound';
+import RoomProvider from '../../contexts/room';
+import { CreateRoomModal } from '../CreateRoom';
 
 function AuthorizedView() {
   return (
-    <>
+    <RoomProvider>
+      <CreateRoomModal />
       <Box maxW="100vw" p={4} color="white">
         <Header />
       </Box>
@@ -17,7 +20,7 @@ function AuthorizedView() {
         <Route path="/:id" exact children={<Room />} />
         <Route Route path="*" children={<NotFound />} />
       </Switch>
-    </>
+    </RoomProvider>
   )
 };
 
