@@ -1,10 +1,13 @@
 import sqlite3
 from flask import g
+import os
 
 DATABASE = './server/db/karaoke.db'
 
-
 def create_database():
+    # if os.path.exists(DATABASE):
+    #     os.remove(DATABASE)
+
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
     create_room_table = '''CREATE TABLE IF NOT EXISTS rooms(
@@ -13,20 +16,12 @@ def create_database():
                         playlist_id TEXT NOT NULL,
                         owner TEXT NOT NULL,
                         room_name TEXT,
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);'''
-
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP); '''
+    
     cur.execute(create_room_table)
-
     conn.commit()
     conn.close()
-
     print('Database ready to go')
-
-
-def make_dicts(cursor, row):
-    return dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
-
 
 def connect():
     db = getattr(g, '_database', None)
@@ -34,6 +29,9 @@ def connect():
         db = g._database = sqlite3.connect(DATABASE, isolation_level=None)
     return db
 
+def make_dicts(cursor, row):
+    return dict((cursor.description[idx][0], value)
+                for idx, value in enumerate(row))
 
 def query(query, args=(), one=False):
     conn = connect()
@@ -57,4 +55,39 @@ def delete_room(session):
     sql = 'DELETE FROM rooms WHERE session=?'
     cur = conn.cursor()
     cur.execute(sql, session)
+    return cur.lastrowid
+
+def create_playlist_table(playlist_id):
+    conn = connect()
+    cur = conn.cursor()
+
+    create_playlist_table = f'''CREATE TABLE IF NOT EXISTS "{playlist_id}"(
+                            video_id TEXT PRIMARY KEY,
+                            title TEXT NOT NULL,
+                            thumbnail_url TEXT NOT NULL,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);'''
+
+    cur.execute(create_playlist_table)
+
+    conn.commit()
+    conn.close()
+
+    print('Database ready to go')
+
+
+def create_playlist_items(playlist_id, items):
+    conn = connect()
+    sql = f'''INSERT INTO "{playlist_id}"(video_id,title,thumbnail_url) 
+                    VALUES '''
+
+    items_len = len(items)-1
+    for index, item in enumerate(items):
+        sql = f'{sql} (\"{item["snippet"]["resourceId"]["videoId"]}\",\"{item["snippet"]["title"]}\",\"{item["snippet"]["thumbnails"]["default"]["url"]}\")'
+        if index == items_len:
+            sql = sql + ";"
+        else:
+            sql = sql + ","
+    cur = conn.cursor()
+    cur.execute(f'DELETE FROM "{playlist_id}";')
+    cur.execute(sql)
     return cur.lastrowid
