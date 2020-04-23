@@ -7,7 +7,7 @@ function Queue() {
   const { room, streams } = useRoom();
   return (
     <>
-      {room ?
+      {room?.result ?
         <Flex direction="row">
           <Box h="12vh" w="10vw" m="10px">
             <Box id="publishedVideo"></Box>
@@ -52,12 +52,12 @@ const Subscriber = React.memo(({ stream }) => {
 function EmptyQueue() {
   return (
     <Flex direction="row">
-      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vh" m="10px" />
-      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vh" m="10px" />
-      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vh" m="10px" />
-      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vh" m="10px" />
-      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vh" m="10px" />
-      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vh" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vw" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vw" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vw" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vw" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vw" m="10px" />
+      <Skeleton colorStart="#EBF8FF" colorEnd="#CEEDFF" height="12vh" width="10vw" m="10px" />
     </Flex>
   )
 }
