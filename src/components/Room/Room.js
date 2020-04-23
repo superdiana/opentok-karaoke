@@ -11,7 +11,7 @@ import { useRoom } from '../../contexts/room';
 function Room() {
   const { room } = useRoom();
   const { result, error, loading } = room;
-  console.log(result)
+
   return (
     <>
       {error?.response?.status === 404 ? <Redirect to="/404" /> : null}

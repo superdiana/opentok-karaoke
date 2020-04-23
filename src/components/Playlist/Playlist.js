@@ -5,7 +5,7 @@ import { useRoom } from '../../contexts/room';
 function Playlist() {
   const { playlist } = useRoom();
   const { result } = playlist;
-  
+
   return (
     <Flex
       direction="column"
