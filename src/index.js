@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { CSSReset, ThemeProvider, theme } from "@chakra-ui/core";
 import App from './components/App';
 import FirebaseProvider from './contexts/firebase';
+import "../node_modules/video-react/dist/video-react.css";
 
 ReactDOM.render(
   <FirebaseProvider>

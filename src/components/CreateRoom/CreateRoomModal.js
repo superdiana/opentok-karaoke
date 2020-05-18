@@ -63,27 +63,17 @@ function CreateRoomModal() {
         <ModalHeader>Create New Karaoke Room</ModalHeader>
         <ModalCloseButton />
         <Formik
-          initialValues={{ playlist_id: "", room_name: `${user.displayName}'s Room` }}
+          initialValues={{ playlist_id: "12345", room_name: `${user.displayName}'s Room` }}
           onSubmit={createNewRoom}
         >
           {({ isSubmitting, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <ModalBody>
-                <Field name="playlist_id">
-                  {({ field }) => (
-                    <FormControl mb={10}>
-                      <FormLabel htmlFor="playlist_id">YouTube Playlist ID</FormLabel>
-                      <Input {...field} id="playlist_id" placeholder="123-456-789" ref={focus} />
-                    </FormControl>
-                  )}
-                </Field>
-
-
-                <Field name="room_name">
+                <Field name="room_name" >
                   {({ field }) => (
                     <FormControl mb={10}>
                       <FormLabel htmlFor="room_name">Room Name</FormLabel>
-                      <Input {...field} id="room_name" />
+                      <Input {...field} id="room_name" ref={focus} />
                     </FormControl>
                   )}
                 </Field>

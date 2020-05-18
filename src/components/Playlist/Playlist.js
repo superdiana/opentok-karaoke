@@ -3,8 +3,8 @@ import { Flex, Image, PseudoBox, Text, Skeleton } from '@chakra-ui/core';
 import { useRoom } from '../../contexts/room';
 
 function Playlist() {
-  const { playlist } = useRoom();
-  const { result } = playlist;
+  const { setVideoUrl } = useRoom();
+  const result = [{ video_url: "/songs/black_sun.mp4", title: "Black Sun"}];
 
   return (
     <Flex
@@ -14,24 +14,20 @@ function Playlist() {
       overflow="scroll"
       p={4}
     >
-      {result ? result?.data?.data.map((item) => {
+      {result ? result.map((item) => {
         return (
           <PseudoBox
             w="100%"
             display="flex"
             direction="row"
-            key={item.video_id}
+            key={item.video_url}
+            onClick={() => { setVideoUrl(item.video_url) }}
             flexWrap="nowrap"
             alignItems="center"
             _hover={{ bg: "gray.600" }}
             mb="10px"
             p="3px"
           >
-            <Image
-              flex={1}
-              mr="8px"
-              src={item.thumbnail_url}
-            />
             <Text fontSize="xs" flex={1}>{item.title}</Text>
           </PseudoBox>
 

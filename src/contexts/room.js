@@ -22,22 +22,24 @@ const getOTToken = async id => {
   return await axios.get(`/api/room/${id}/token`)
 };
 
-const getYTPlaylistItems = async id => {
-  if (!id) return null;
-  return await axios.get(`/api/room/${id}/playlist`)
-};
+// const getYTPlaylistItems = async id => {
+//   if (!id) return null;
+//   return await axios.get(`/api/room/${id}/playlist`)
+// };
 
 function RoomProvider({ children }) {
   const home = useRouteMatch("/");
   const route = useRouteMatch("/:id");
   const room = useAsync(getRoom, [route?.params?.id]);
   const token = useAsync(getOTToken, [route?.params?.id]);
-  const playlist = useAsync(getYTPlaylistItems, [route?.params?.id]);
+  // const playlist = useAsync(getYTPlaylistItems, [route?.params?.id]);
 
   const [publisher, setPublisher] = useState(null);
   const [session, setSession] = useState(null);
   const [streams, setStreams] = useState([]);
   const [connected, setConnected] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [captureStarted, setCaptureStarted] = useState(false);
   const { isOpen: modalVisible, onOpen: openModal, onClose: closeModal } = useDisclosure();
 
   //show/hide create room modal
@@ -96,12 +98,45 @@ function RoomProvider({ children }) {
     });
   };
 
+  const createVideoPublisher = (video) => {
+    let songPublisher;
+    const stream = video.captureStream();
+    const publish = () => {
+      const videoTracks = stream.getVideoTracks();
+      const audioTracks = stream.getAudioTracks();
+      if (!songPublisher && videoTracks.length > 0 && audioTracks.length > 0) {
+        stream.removeEventListener('addtrack', publish);
+        songPublisher = OT.initPublisher('publisher', {
+          videoSource: videoTracks[0],
+          audioSource: audioTracks[0],
+          name: "songPublisher"
+        }, (err) => {
+          if (err) {
+            video.pause();
+            alert(err.message);
+          } else {
+            session.publish(songPublisher);
+          }
+        });
+        songPublisher.on('destroyed', () => {
+          video.pause();
+        });
+      }
+    };
+    stream.addEventListener('addtrack', publish);
+    publish();
+  };
+
   const value = {
     room,
-    playlist,
     streams,
     createStream,
     session,
+    videoUrl,
+    setVideoUrl,
+    createVideoPublisher,
+    captureStarted,
+    setCaptureStarted,
     modalVisible,
     openModal,
     closeModal

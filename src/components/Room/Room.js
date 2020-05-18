@@ -18,7 +18,7 @@ function Room() {
       {loading ? null :
         <>
           <Helmet>
-            <title>{`${result?.data.data[0].room_name} - OTK`}</title>
+            <title>{`${result?.data.data[0].room_name || 'Welcome!'} - OTK`}</title>
           </Helmet>
           <Flex direction="row" w="100vw" color="white" flex="1 1 70vh" overflow="hidden">
             <Box flexBasis="80vw" color="white" p={4}>

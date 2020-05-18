@@ -43,7 +43,7 @@ const Subscriber = React.memo(({ stream }) => {
 
   return (
     <Box h="12vh" w="10vw" m="10px">
-      <Box ref={videoRef} id={stream.connection.id}></Box>
+      <Box ref={videoRef} id={stream.streamId}></Box>
     </Box>)
 }, streamCheck);
 
